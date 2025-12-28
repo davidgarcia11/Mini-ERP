@@ -1,3 +1,5 @@
+import java.io.*;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class MiSistemaERP {
@@ -8,6 +10,8 @@ public class MiSistemaERP {
         int[] stock = new int[10];
         int opcion;
         boolean salir = false;
+        File clientes = new File("Archivos/clientes.txt");
+        HashMap <String, Integer> listaClientes = new HashMap<>();
 
         do{
             System.out.println("\n╔════════════════════════════════════╗");
@@ -42,7 +46,11 @@ public class MiSistemaERP {
                     anadirStock(productos, stock, scanner);
                     break;
 
-                case 7:
+                case 4:
+                    anadirProducto(productos, precios, stock, scanner);
+                    break;
+
+                case 5:
                     anadirProducto(productos, precios, stock, scanner);
                     break;
 
@@ -51,7 +59,7 @@ public class MiSistemaERP {
                     break;
             }
 
-        }while(salir == false);
+        }while(!salir);
 
     }
 
@@ -80,7 +88,7 @@ public class MiSistemaERP {
             }
         }
 
-        if (find == true){
+        if (find){
             System.out.println("Tenemos tu producto en Stock");
             System.out.println("Descripcion: " + productos[productoEncontrado]);
             System.out.println("Precio: " + precios[productoEncontrado]);
@@ -130,7 +138,7 @@ public class MiSistemaERP {
             }
         }
 
-        if (find == true){
+        if (find){
             System.out.println("Indica el stock que quieres añadir o restar:");
             stockAnadir = scanner.nextInt();
             stock[productoEncontrado] += stockAnadir;
@@ -139,5 +147,23 @@ public class MiSistemaERP {
         }
     }
 
+    public static void leerClientes(File clientes, HashMap<String, Integer> listaClientes) {
+        String nombre;
+        int edad;
+        try (BufferedReader br = new BufferedReader(new FileReader(clientes))) {
+            String linea;
+            // Lee el archivo línea por línea
+            while ((linea = br.readLine()) != null) {
+                // Divide la línea por la coma
+                String[] campos = linea.split(",");
+                nombre = campos[0];
+                edad = Integer.parseInt(campos[1]);
+                // Añade los campos a la lista
+                listaClientes.put(nombre, edad);
+            }
+        }catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
+    }
 }
